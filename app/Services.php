@@ -22,6 +22,15 @@ class Services
         return $this->services;
     }
 
+    public function allByCategory(): array
+    {
+        return collect((new Services)->all())
+            ->mapWithKeys(function ($fqcn, $shortName) {
+                return [$shortName => $fqcn::category()];
+            })
+            ->toArray();
+    }
+
     public function classesInServicesNamespace(): array
     {
         return collect(scandir(base_path('app/Services')))->reject(function ($file) {
