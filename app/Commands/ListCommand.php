@@ -10,14 +10,16 @@ class ListCommand extends Command
 {
     use InitializesCommands;
 
-    protected $signature = 'list {--json}';
+    protected $signature = 'list {--json}{--networking}';
     protected $description = 'List all services enabled by Takeout.';
 
     public function handle(): void
     {
         $this->initializeCommand();
 
-        $containersCollection = app(Docker::class)->takeoutContainers();
+        $docker = app(Docker::class);
+
+        $containersCollection = $docker->takeoutContainers();
 
         if ($this->option('json')) {
             $this->line($containersCollection->toJson());
@@ -26,6 +28,16 @@ class ListCommand extends Command
 
         if ($containersCollection->isEmpty()) {
             $this->info("No Takeout containers are enabled.\n");
+            return;
+        }
+
+        if ($this->option('networking')) {
+            $takeoutNetworkContainers = $docker->takeoutNetworkContainers();
+
+            $containers = $takeoutNetworkContainers->toArray();
+            $columns = array_map('App\title_from_slug', array_keys(reset($containers)));
+
+            $this->table($columns, $containers);
             return;
         }
 

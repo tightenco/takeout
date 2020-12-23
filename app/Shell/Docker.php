@@ -94,6 +94,13 @@ class Docker
 
     public function takeoutContainers(): Collection
     {
+        return $this->runAndParseTable(
+            "docker ps -a --filter 'name=TO-' --format 'table {{.ID}}|{{.Names}}|{{.Status}}|{{.Ports}}'"
+        );
+    }
+
+    public function takeoutNetworkContainers(): Collection
+    {
         $process = sprintf(
             "docker ps -a --filter 'name=TO-' --format 'table %s|%s'",
             '{{.ID}}|{{.Names}}|{{.Status}}|{{.Ports}}',

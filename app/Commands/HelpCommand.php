@@ -18,7 +18,7 @@ class HelpCommand extends Command
         'start {container}' => 'Start the provided stopped container (by ID)',
         'stop' => 'Stop a running container from a list of options',
         'stop {container}' => 'Stop the provided running container (by ID)',
-        'list' => 'List all enabled services (optionally pass --json flag)',
+        'list' => 'List all enabled services (optionally pass --json or --networking flags)',
         'logs {container}' => 'Display container logs (by ID)',
     ];
 
