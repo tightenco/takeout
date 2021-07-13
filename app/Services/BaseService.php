@@ -158,6 +158,10 @@ abstract class BaseService
             $items[] = $prompt;
         }
 
+        if (Str::is('*:*', $this->promptResponses['tag'])) {
+            [$image, $this->promptResponses['tag']] = explode(':', $this->promptResponses['tag']);
+            [$this->promptResponses['organization'], $this->promptResponses['image_name']] = Str::is('*/*', $image) ? explode('/', $image) : [$this->organization, $image];
+        }
         $this->tag = $this->resolveTag($this->promptResponses['tag']);
     }
 
